@@ -1,23 +1,28 @@
+/* eslint-disable */
 import { DataSource } from 'typeorm';
 import { ConfigService } from '@nestjs/config';
+import { Injectable } from '@nestjs/common';
+import { TypeOrmModuleOptions, TypeOrmOptionsFactory } from '@nestjs/typeorm';
 
-export const createDataSource = (configService: ConfigService): DataSource => {
-  return new DataSource({
-    type: 'postgres',
-    url: configService.get<string>('DB_URL') || '',
+@Injectable()
+export class PostgreSQLConfigService implements TypeOrmOptionsFactory {
+  constructor(private configService: ConfigService) {}
 
-    // host: configService.get<string>('DB_HOST') || 'localhost',
-    // port: configService.get<number>('DB_PORT') || 5432,
-    // username: configService.get<string>('DB_USERNAME') || 'postgres',
-    // password: configService.get<string>('DB_PASSWORD') || '',
-    // database: configService.get<string>('DB_NAME') || 'enbros_nest',
-    entities: [__dirname + '/**/*.entity{.ts,.js}'],
-    migrations: [__dirname + '/migrations/*{.ts,.js}'],
-    // synchronize: configService.get<string>('NODE_ENV') === 'development',
-    synchronize: true,
-    logging: configService.get<string>('NODE_ENV') === 'development',
-    ssl: {
-      rejectUnauthorized: true,
-    },
-  });
-};
+  createTypeOrmOptions(
+    connectionName?: string,
+  ): Promise<TypeOrmModuleOptions> | TypeOrmModuleOptions {
+    return {
+      type: 'postgres',
+      host: this.configService.get('DB_HOST'),
+      port: this.configService.get('DB_PORT'),
+      username: this.configService.get('DB_USERNAME'),
+      password: this.configService.get('DB_PASSWORD'),
+      database: this.configService.get('DB_NAME'),
+      autoLoadEntities: true,
+      synchronize: true,
+      ssl: {
+        rejectUnauthorized: false,
+      },
+    };
+  }
+}

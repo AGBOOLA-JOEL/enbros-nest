@@ -40,7 +40,9 @@ export class AuthService {
     return { message: 'User registered successfully' };
   }
 
-  async login(loginDto: LoginDto): Promise<{ access_token: string }> {
+  async login(
+    loginDto: LoginDto,
+  ): Promise<{ access_token: string; user: any }> {
     const { username, password } = loginDto;
 
     // Find user with password for verification
@@ -57,10 +59,19 @@ export class AuthService {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    // Generate JWT token
+    // Generate JWT token with minimal payload
     const payload = { username: user.username, sub: user.id };
     const access_token = this.jwtService.sign(payload);
 
-    return { access_token };
+    // Return both token and user data (excluding password)
+    return {
+      access_token,
+      user: {
+        id: user.id,
+        username: user.username,
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt,
+      },
+    };
   }
 }

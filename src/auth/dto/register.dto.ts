@@ -6,8 +6,14 @@ import {
   MaxLength,
   Matches,
 } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class RegisterDto {
+  @ApiProperty({
+    example: 'john_doe',
+    description:
+      'Username for the account (3-30 characters, letters, numbers, underscores only)',
+  })
   @IsString()
   @IsNotEmpty()
   @MinLength(3)
@@ -17,6 +23,11 @@ export class RegisterDto {
   })
   username: string;
 
+  @ApiProperty({
+    example: 'MySecurePassword123',
+    description:
+      'Password for the account (8-128 characters, must contain lowercase, uppercase, and number)',
+  })
   @IsString()
   @IsNotEmpty()
   @MinLength(8)
