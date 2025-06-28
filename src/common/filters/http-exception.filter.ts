@@ -27,10 +27,15 @@ export class HttpExceptionFilter implements ExceptionFilter {
 
     if (exception instanceof HttpException) {
       const exceptionResponse = exception.getResponse();
-      message =
-        typeof exceptionResponse === 'string'
-          ? exceptionResponse
-          : (exceptionResponse as any).message || exception.message;
+
+      if (typeof exceptionResponse === 'string') {
+        message = exceptionResponse;
+      } else if (Array.isArray((exceptionResponse as any).message)) {
+        // Handle validation error arrays - return the first error message
+        message = (exceptionResponse as any).message[0];
+      } else {
+        message = (exceptionResponse as any).message || exception.message;
+      }
     } else {
       message = 'Internal server error';
       // Log the actual error for debugging but don't expose it
@@ -79,6 +84,10 @@ export class HttpExceptionFilter implements ExceptionFilter {
       'Admin access required',
       'You can only access your own user data',
       'Invalid token payload',
+      'Password confirmation does not match the password',
+      'Username can only contain letters, numbers, and underscores',
+      'Password must contain at least one lowercase letter, one uppercase letter, and one number',
+      'Passwords do not match',
     ];
 
     if (allowedMessages.some((allowed) => message.includes(allowed))) {

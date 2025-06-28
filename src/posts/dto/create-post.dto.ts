@@ -1,5 +1,12 @@
 /* eslint-disable */
-import { IsString, IsNotEmpty, MinLength, MaxLength } from 'class-validator';
+import {
+  IsString,
+  IsNotEmpty,
+  MinLength,
+  MaxLength,
+  IsOptional,
+  IsArray,
+} from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreatePostDto {
@@ -23,4 +30,25 @@ export class CreatePostDto {
   @MinLength(1)
   @MaxLength(10000)
   content: string;
+
+  @ApiProperty({
+    example:
+      'A comprehensive guide to getting started with NestJS framework for building scalable applications.',
+    description: 'Description of the post (optional)',
+    required: false,
+  })
+  @IsOptional()
+  @IsString()
+  @MaxLength(500)
+  desc?: string;
+
+  @ApiProperty({
+    example: ['nestjs', 'nodejs', 'typescript', 'backend'],
+    description: 'Tags for categorizing the post (optional)',
+    required: false,
+  })
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  tags?: string[];
 }

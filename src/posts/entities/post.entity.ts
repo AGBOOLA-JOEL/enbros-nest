@@ -36,6 +36,21 @@ export class Post {
   content: string;
 
   @ApiProperty({
+    example:
+      'A comprehensive guide to getting started with NestJS framework for building scalable applications.',
+    description: 'Description of the post',
+  })
+  @Column('text', { nullable: true })
+  desc: string;
+
+  @ApiProperty({
+    example: ['nestjs', 'nodejs', 'typescript', 'backend'],
+    description: 'Tags for categorizing the post',
+  })
+  @Column('simple-array', { nullable: true })
+  tags: string[];
+
+  @ApiProperty({
     type: () => User,
     description: 'Author of the post',
   })
