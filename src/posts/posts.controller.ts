@@ -105,7 +105,7 @@ export class PostsController {
   @Patch(':id')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Update a post (owner only)' })
+  @ApiOperation({ summary: 'Update a post (owner or admin only)' })
   @ApiResponse({
     status: 200,
     description: 'Post updated successfully',
@@ -124,7 +124,10 @@ export class PostsController {
     },
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  @ApiResponse({ status: 403, description: 'Forbidden - not the owner' })
+  @ApiResponse({
+    status: 403,
+    description: 'Forbidden - not the owner or admin',
+  })
   @ApiResponse({ status: 404, description: 'Post not found' })
   async update(
     @Param('id') id: string,
@@ -137,7 +140,7 @@ export class PostsController {
   @Delete(':id')
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Delete a post (owner only)' })
+  @ApiOperation({ summary: 'Delete a post (owner or admin only)' })
   @ApiResponse({
     status: 200,
     description: 'Post deleted successfully',
@@ -148,7 +151,10 @@ export class PostsController {
     },
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  @ApiResponse({ status: 403, description: 'Forbidden - not the owner' })
+  @ApiResponse({
+    status: 403,
+    description: 'Forbidden - not the owner or admin',
+  })
   @ApiResponse({ status: 404, description: 'Post not found' })
   async remove(@Param('id') id: string, @CurrentUser() user: any) {
     await this.postsService.remove(id, user);
