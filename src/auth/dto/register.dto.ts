@@ -15,10 +15,10 @@ export class RegisterDto {
     description:
       'Username for the account (3-30 characters, letters, numbers, underscores only)',
   })
-  @IsString()
-  @IsNotEmpty()
-  @MinLength(3)
-  @MaxLength(30)
+  @IsString({ message: 'Username must be a string' })
+  @IsNotEmpty({ message: 'Username is required' })
+  @MinLength(3, { message: 'Username must be at least 3 characters long' })
+  @MaxLength(30, { message: 'Username cannot exceed 30 characters' })
   @Matches(/^[a-zA-Z0-9_]+$/, {
     message: 'Username can only contain letters, numbers, and underscores',
   })
@@ -29,10 +29,10 @@ export class RegisterDto {
     description:
       'Password for the account (8-128 characters, must contain lowercase, uppercase, and number)',
   })
-  @IsString()
-  @IsNotEmpty()
-  @MinLength(8)
-  @MaxLength(128)
+  @IsString({ message: 'Password must be a string' })
+  @IsNotEmpty({ message: 'Password is required' })
+  @MinLength(8, { message: 'Password must be at least 8 characters long' })
+  @MaxLength(128, { message: 'Password cannot exceed 128 characters' })
   @Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/, {
     message:
       'Password must contain at least one lowercase letter, one uppercase letter, and one number',
@@ -43,8 +43,8 @@ export class RegisterDto {
     example: 'MySecurePassword123',
     description: 'Confirm password (must match the password field)',
   })
-  @IsString()
-  @IsNotEmpty()
+  @IsString({ message: 'Password confirmation must be a string' })
+  @IsNotEmpty({ message: 'Password confirmation is required' })
   @Match('password', { message: 'Passwords do not match' })
   confirmPassword: string;
 }

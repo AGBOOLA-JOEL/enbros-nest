@@ -14,10 +14,10 @@ export class CreatePostDto {
     example: 'Getting Started with NestJS',
     description: 'Title of the post (1-200 characters)',
   })
-  @IsString()
-  @IsNotEmpty()
-  @MinLength(1)
-  @MaxLength(200)
+  @IsString({ message: 'Title must be a string' })
+  @IsNotEmpty({ message: 'Title is required' })
+  @MinLength(1, { message: 'Title must be at least 1 character long' })
+  @MaxLength(200, { message: 'Title cannot exceed 200 characters' })
   title: string;
 
   @ApiProperty({
@@ -25,10 +25,10 @@ export class CreatePostDto {
       'NestJS is a progressive Node.js framework for building efficient, reliable and scalable server-side applications. In this post, we will explore the basics of NestJS and how to get started with building your first application.',
     description: 'Content of the post (1-10000 characters)',
   })
-  @IsString()
-  @IsNotEmpty()
-  @MinLength(1)
-  @MaxLength(10000)
+  @IsString({ message: 'Content must be a string' })
+  @IsNotEmpty({ message: 'Content is required' })
+  @MinLength(1, { message: 'Content must be at least 1 character long' })
+  @MaxLength(10000, { message: 'Content cannot exceed 10000 characters' })
   content: string;
 
   @ApiProperty({
@@ -38,8 +38,8 @@ export class CreatePostDto {
     required: false,
   })
   @IsOptional()
-  @IsString()
-  @MaxLength(500)
+  @IsString({ message: 'Description must be a string' })
+  @MaxLength(500, { message: 'Description cannot exceed 500 characters' })
   desc?: string;
 
   @ApiProperty({
@@ -48,7 +48,7 @@ export class CreatePostDto {
     required: false,
   })
   @IsOptional()
-  @IsArray()
-  @IsString({ each: true })
+  @IsArray({ message: 'Tags must be an array' })
+  @IsString({ each: true, message: 'Each tag must be a string' })
   tags?: string[];
 }

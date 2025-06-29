@@ -87,5 +87,7 @@ DB_USERNAME=postgres
 DB_PASSWORD=your_password_here
 DB_NAME=enbros_nest
 JWT_SECRET=your_jwt_secret_key_here
+# CORS (optional)
+ALLOWED_ORIGINS=yourorigin
 NODE_ENV=development
 ```
