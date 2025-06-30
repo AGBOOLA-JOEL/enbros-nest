@@ -36,6 +36,9 @@ export class PostsService {
           username: true,
         },
       },
+      order: {
+        createdAt: 'DESC',
+      },
     });
   }
 
